@@ -1,14 +1,17 @@
+require('datejs');
 const jwt = require('jsonwebtoken');
 const config = require('./config');
 const rp = require('request-promise');
 const commandLineArgs = require('command-line-args');
-const d = require('date-util');
+
 var formatDate = function(arg) {
-    // 2020/1/1 ではなく 1/1 で渡すとなぜか
-    var ts = new Date().strtotime(arg) * 1000;
-    var tsDate = new Date(ts);
-    return tsDate.format("yyyy/mm/dd") + 'T' + tsDate.format("HH:MM:ss");
+    var r = Date.parse(arg);
+    if (r === null) {
+        throw new Error("日付のフォーマットが異常です:" + arg);
+    }
+    return r.toString('yyyy-MM-ddTHH:mm:ss');
 };
+
 var generatePassword = function() {
     const length = 8;
     var result     = '';
@@ -20,11 +23,11 @@ var generatePassword = function() {
     return result;
 };
 var output = function(resp) {
-    console.log("--------------------");
-    console.log("url: " + resp.join_url);
-    console.log("password: " + resp.password);
-    // ここはまだフォーマットの必要がある
-    console.log("start: " + resp.start_time);
+    console.info("--------------------");
+    console.info("url: " + resp.join_url);
+    console.info("password: " + resp.password);
+    console.info("start: " + Date.parse(resp.start_time).toString("yyyy/MM/dd HH:mm"));
+    console.info("--------------------");
 };
 
 // コマンドラインオプションの定義
@@ -55,6 +58,8 @@ const payload = {
 };
 const token = jwt.sign(payload, config.APISecret);
 
+
+// ミーティング作成オプションパラメータの構築
 var createMeetingOptions = {
     method: "POST",
     uri: "https://api.zoom.us/v2/users/" + config.user + "/meetings",
@@ -81,6 +86,7 @@ var createMeetingOptions = {
     json: true //Parse the JSON string in the response
 };
 
+// API呼び出し
 rp(createMeetingOptions).then(function(response) {
     output(response);
 }).catch(function(err) {
