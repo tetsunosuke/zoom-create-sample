@@ -45,7 +45,7 @@ const optionDefinitions = [
     defaultValue: "no title"
   },
   {
-    name: 'minitues',
+    name: 'minutes',
     type: Number,
     defaultValue: 60
   }
@@ -68,7 +68,7 @@ var createMeetingOptions = {
         "topic": options.topic,
         "start_time": formatDate(options.start),
         "timezone": "Asia/Tokyo",
-        "duration": options.minitues,
+        "duration": options.minutes,
         "password": generatePassword(),
         "settings": {
             "host_video": "true",
