@@ -4,25 +4,25 @@ const config = require('./config');
 const rp = require('request-promise');
 const commandLineArgs = require('command-line-args');
 
-var formatDate = function(arg) {
-    var r = Date.parse(arg);
+const formatDate = function(arg) {
+    const r = Date.parse(arg);
     if (r === null) {
         throw new Error("日付のフォーマットが異常です:" + arg);
     }
     return r.toString('yyyy-MM-ddTHH:mm:ss');
 };
 
-var generatePassword = function() {
+const generatePassword = function() {
     const length = 8;
-    var result     = '';
-    var characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
-    var charactersLength = characters.length;
-    for ( var i = 0; i < length; i++ ) {
+    let result     = '';
+    const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+    const charactersLength = characters.length;
+    for ( let i = 0; i < length; i++ ) {
         result += characters.charAt(Math.floor(Math.random() * charactersLength));
     }
     return result;
 };
-var output = function(resp) {
+const output = function(resp) {
     console.info("--------------------");
     console.info("url: " + resp.join_url);
     console.info("password: " + resp.password);
@@ -57,10 +57,10 @@ const payload = {
     exp: ((new Date()).getTime() + 5000)
 };
 const token = jwt.sign(payload, config.APISecret);
-
+console.log(token);
 
 // ミーティング作成オプションパラメータの構築
-var createMeetingOptions = {
+const createMeetingOptions = {
     method: "POST",
     uri: "https://api.zoom.us/v2/users/" + config.user + "/meetings",
     body: body = {

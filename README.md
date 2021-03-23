@@ -5,7 +5,8 @@ zoomのミーティングを作成するCLI
 
 `config.js` にAPIKey, APISecret, user（メールアドレス） を記載しておくこと
 
-※ この設定法については詳しく書く
+アプリを作る際には、JWT でアプリを作成し、APIKey/Secretを取得すること。
+
 
 ```config.js
 const env = process.env.NODE_ENV || 'production'
